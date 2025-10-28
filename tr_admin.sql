@@ -26,7 +26,7 @@ CREATE TABLE `admin` (
   `admin_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `ticket_id` int DEFAULT NULL,
-  `username` varchar(100) DEFAULT NULL,
+  `username` varchar(100)unique DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`admin_id`),
   KEY `user_id` (`user_id`),
@@ -55,3 +55,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-10-28 13:11:19
+
