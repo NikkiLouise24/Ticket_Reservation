@@ -26,7 +26,7 @@ CREATE TABLE `ticket` (
   `ticket_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
   `seatNumber` varchar(10) DEFAULT NULL,
-  `ticketType` varchar(100) DEFAULT NULL,
+  `ticketType` varchar(100)unique DEFAULT NULL,
   `price` varchar(100) DEFAULT NULL,
   `bookingDate` date DEFAULT NULL,
   `status` varchar(100) DEFAULT NULL,
@@ -55,3 +55,4 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-10-28 13:11:20
+
