@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Concert Hub</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  background: rgba(255, 255, 255, 0.98);
+  padding: 20px 40px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo::before {
+  content: '';
+  width: 25px;
+  height: 25px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E");
+  background-size: contain;
+}
+
+.site-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.admin-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Container */
+.container {
+  max-width: 1400px;
+  margin: 40px auto;
+  padding: 0 40px;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: slideUp 0.6s ease-out;
+}
+
+.dashboard-header h1 {
+  color: white;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.dashboard-header p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  animation: slideUp 0.6s ease-out;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.stat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon svg {
+  width: 28px;
+  height: 28px;
+  fill: white;
+}
+
+.stat-icon.purple {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.stat-icon.green {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.stat-icon.orange {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.stat-icon.blue {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-trend {
+  font-size: 13px;
+  color: #11998e;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.stat-trend.down {
+  color: #f5576c;
+}
+
+/* Main Content */
+.main-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+/* Section Card */
+.section-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.6s ease-out;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.add-btn {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+}
+
+/* Concert List */
+.concert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.concert-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.concert-item:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+}
+
+.concert-info {
+  flex: 1;
+}
+
+.concert-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.concert-details-text {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.concert-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-edit {
+  background: #667eea;
+  color: white;
+}
+
+.btn-edit:hover {
+  background: #5568d3;
+}
+
+.btn-delete {
+  background: #dc3545;
+  color: white;
+}
+
+.btn-delete:hover {
+  background: #c82333;
+}
+
+/* Bookings List */
+.booking-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.booking-item:hover {
+  background: #e9ecef;
+}
+
+.booking-info h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.booking-info p {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.booking-status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-confirmed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+/* Full Width Section */
+.full-width-section {
+  grid-column: 1 / -1;
+}
+
+/* Activity Feed */
+.activity-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: start;
+  gap: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.activity-item:hover {
+  background: #e9ecef;
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.activity-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: white;
+}
+
+.activity-content {
+  flex: 1;
+}
+
+.activity-content h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.activity-content p {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.activity-time {
+  font-size: 12px;
+  color: #adb5bd;
+  white-space: nowrap;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  margin-bottom: 30px;
+}
+
+.modal-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.modal-header p {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.btn-secondary:hover {
+  background: #dee2e6;
+}
+
+/* Delete Confirmation Modal */
+.delete-modal .modal-content {
+  max-width: 400px;
+  text-align: center;
+}
+
+.delete-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-icon svg {
+  width: 40px;
+  height: 40px;
+  fill: white;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+}
+
+.empty-state svg {
+  width: 60px;
+  height: 60px;
+  fill: #adb5bd;
+  margin-bottom: 15px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .main-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 15px 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .container {
+    padding: 0 20px;
+    margin: 20px auto;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 32px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .concert-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .concert-actions {
+    width: 100%;
+  }
+  
+  .action-btn {
+    flex: 1;
+  }
+
+  .modal-content {
+    padding: 30px 20px;
+  }
+}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="logo-section">
+    <div class="logo"></div>
+    <h1 class="site-title">Concert Hub</h1>
+  </div>
+  <div class="admin-badge">ADMIN DASHBOARD</div>
+</header>
+
+<div class="container">
+  <div class="dashboard-header">
+    <h1>Welcome Back, Admin</h1>
+    <p>Manage your concerts, bookings, and analytics</p>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-value" id="totalBookings">1,247</div>
+          <div class="stat-label">Total Bookings</div>
+        </div>
+        <div class="stat-icon purple">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-trend">↑ 12% from last month</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-value">$89,450</div>
+          <div class="stat-label">Revenue</div>
+        </div>
+        <div class="stat-icon green">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-trend">↑ 8% from last month</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-value" id="activeConcerts">24</div>
+          <div class="stat-label">Active Concerts</div>
+        </div>
+        <div class="stat-icon orange">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-trend">↑ 3 new this week</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-header">
+        <div>
+          <div class="stat-value">892</div>
+          <div class="stat-label">Active Users</div>
+        </div>
+        <div class="stat-icon blue">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="stat-trend">↑ 156 new users</div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Concert Management -->
+    <div class="section-card">
+      <div class="section-header">
+        <h2 class="section-title">Concert Management</h2>
+        <button class="add-btn" onclick="openAddModal()">+ Add Concert</button>
+      </div>
+      <div class="concert-list" id="concertList"></div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="section-card">
+      <div class="section-header">
+        <h2 class="section-title">Recent Bookings</h2>
+      </div>
+      <div class="booking-item">
+        <div class="booking-info">
+          <h4>John Doe</h4>
+          <p>Tyler, The Creator • 2 VIP Tickets</p>
+        </div>
+        <span class="booking-status status-confirmed">Confirmed</span>
+      </div>
+      <div class="booking-item">
+        <div class="booking-info">
+          <h4>Sarah Smith</h4>
+          <p>The Weeknd • 4 General Tickets</p>
+        </div>
+        <span class="booking-status status-confirmed">Confirmed</span>
+      </div>
+      <div class="booking-item">
+        <div class="booking-info">
+          <h4>Mike Johnson</h4>
+          <p>Billie Eilish • 1 Premium Ticket</p>
+        </div>
+        <span class="booking-status status-pending">Pending</span>
+      </div>
+      <div class="booking-item">
+        <div class="booking-info">
+          <h4>Emily Davis</h4>
+          <p>Bad Bunny • 3 VIP Tickets</p>
+        </div>
+        <span class="booking-status status-confirmed">Confirmed</span>
+      </div>
+      <div class="booking-item">
+        <div class="booking-info">
+          <h4>Chris Wilson</h4>
+          <p>Tyler, The Creator • 2 General Tickets</p>
+        </div>
+        <span class="booking-status status-confirmed">Confirmed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activity Feed -->
+  <div class="section-card full-width-section">
+    <div class="section-header">
+      <h2 class="section-title">Recent Activity</h2>
+    </div>
+    <div class="activity-feed">
+      <div class="activity-item">
+        <div class="activity-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+        </div>
+        <div class="activity-content">
+          <h4>New booking confirmed</h4>
+          <p>John Doe purchased 2 VIP tickets for Tyler, The Creator</p>
+        </div>
+        <div class="activity-time">2 min ago</div>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+        </div>
+        <div class="activity-content">
+          <h4>Payment received</h4>
+          <p>$350 received from Sarah Smith for The Weeknd concert</p>
+        </div>
+        <div class="activity-time">15 min ago</div>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+          </svg>
+        </div>
+        <div class="activity-content">
+          <h4>New concert added</h4>
+          <p>Drake - It's All A Blur Tour added to upcoming events</p>
+        </div>
+        <div class="activity-time">1 hour ago</div>
+      </div>
+
+      <div class="activity-item">
+        <div class="activity-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+          </svg>
+        </div>
+        <div class="activity-content">
+          <h4>New user registered</h4>
+          <p>Emma Thompson created an account</p>
+        </div>
+        <div class="activity-time">2 hours ago</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit/Add Concert Modal -->
+<div class="modal" id="editModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modalTitle">Edit Concert</h2>
+      <p>Update concert information</p>
+    </div>
+    <form id="concertForm" onsubmit="handleFormSubmit(event)">
+      <div class="form-group">
+        <label for="concertName">Concert Name</label>
+        <input type="text" id="concertName" required>
+      </div>
+      <div class="form-group">
+        <label for="concertDate">Date</label>
+        <input type="text" id="concertDate" placeholder="e.g., Dec 5, 2026" required>
+      </div>
+      <div class="form-group">
+        <label for="concertVenue">Venue</label>
+        <input type="text" id="concertVenue" required>
+      </div>
+      <div class="form-group">
+        <label for="concertTickets">Tickets Sold</label>
+        <input type="number" id="concertTickets" required>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modal-btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="modal-btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal delete-modal" id="deleteModal">
+  <div class="modal-content">
+    <div class="delete-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+      </svg>
+    </div>
+    <div class="modal-header">
+      <h2>Delete Concert?</h2>
+      <p>This action cannot be undone.</p>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="modal-btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+      <button type="button" class="modal-btn btn-primary" onclick="confirmDelete()" style="background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Concert data
+let concerts = [
+  {
+    id: 1,
+    name: 'Tyler, The Creator',
+    date: 'Dec 5, 2026',
+    venue: 'Forum LA',
+    tickets: 847
+  },
+  {
+    id: 2,
+    name: 'The Weeknd - After Hours Tour',
+    date: 'Jan 15, 2027',
+    venue: 'Staples Center',
+    tickets: 1234
+  },
+  {
+    id: 3,
+    name: 'Billie Eilish World Tour',
+    date: 'Feb 20, 2027',
+    venue: 'Madison Square Garden',
+    tickets: 956
+  },
+  {
+    id: 4,
+    name: 'Bad Bunny - Un Verano Sin Ti',
+    date: 'Mar 10, 2027',
+    venue: 'American Airlines Arena',
+    tickets: 1089
+  }
+];
+
+let editingId = null;
+let deletingId = null;
+
+// Render concerts
+function renderConcerts() {
+  const concertList = document.getElementById('concertList');
+  
+  if (concerts.length === 0) {
+    concertList.innerHTML = `
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 3v9.28c-.47-.17-.97-.28-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/>
+        </svg>
+        <p>No concerts yet. Add your first concert!</p>
+      </div>
+    `;
+    return;
+  }
+  
+  concertList.innerHTML = concerts.map(concert => `
+    <div class="concert-item">
+      <div class="concert-info">
+        <div class="concert-name">${concert.name}</div>
+        <div class="concert-details-text">${concert.date} • ${concert.venue} • ${concert.tickets} tickets sold</div>
+      </div>
+      <div class="concert-actions">
+        <button class="action-btn btn-edit" onclick="editConcert(${concert.id})">Edit</button>
+        <button class="action-btn btn-delete" onclick="deleteConcert(${concert.id})">Delete</button>
+      </div>
+    </div>
+  `).join('');
+  
+  updateStats();
+}
+
+// Update statistics
+function updateStats() {
+  document.getElementById('activeConcerts').textContent = concerts.length;
+  const totalTickets = concerts.reduce((sum, concert) => sum + concert.tickets, 0);
+  document.getElementById('totalBookings').textContent = totalTickets.toLocaleString();
+}
+
+// Open add modal
+function openAddModal() {
+  editingId = null;
+  document.getElementById('modalTitle').textContent = 'Add New Concert';
+  document.getElementById('concertName').value = '';
+  document.getElementById('concertDate').value = '';
+  document.getElementById('concertVenue').value = '';
+  document.getElementById('concertTickets').value = '';
+  document.getElementById('editModal').classList.add('active');
+}
+
+// Edit concert
+function editConcert(id) {
+  editingId = id;
+  const concert = concerts.find(c => c.id === id);
+  
+  if (concert) {
+    document.getElementById('modalTitle').textContent = 'Edit Concert';
+    document.getElementById('concertName').value = concert.name;
+    document.getElementById('concertDate').value = concert.date;
+    document.getElementById('concertVenue').value = concert.venue;
+    document.getElementById('concertTickets').value = concert.tickets;
+    document.getElementById('editModal').classList.add('active');
+  }
+}
+
+// Delete concert
+function deleteConcert(id) {
+  deletingId = id;
+  document.getElementById('deleteModal').classList.add('active');
+}
+
+// Confirm delete
+function confirmDelete() {
+  concerts = concerts.filter(c => c.id !== deletingId);
+  closeDeleteModal();
+  renderConcerts();
+}
+
+// Close modals
+function closeModal() {
+  document.getElementById('editModal').classList.remove('active');
+}
+
+function closeDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('active');
+  deletingId = null;
+}
+
+// Save concert (handle both add and edit)
+function saveConcert() {
+  const name = document.getElementById('concertName').value.trim();
+  const date = document.getElementById('concertDate').value.trim();
+  const venue = document.getElementById('concertVenue').value.trim();
+  const tickets = parseInt(document.getElementById('concertTickets').value);
+  
+  // Validate inputs
+  if (!name || !date || !venue || isNaN(tickets)) {
+    alert('Please fill in all fields correctly');
+    return;
+  }
+  
+  const concertData = {
+    name: name,
+    date: date,
+    venue: venue,
+    tickets: tickets
+  };
+  
+  if (editingId) {
+    // Update existing concert
+    const index = concerts.findIndex(c => c.id === editingId);
+    if (index !== -1) {
+      concerts[index] = { ...concerts[index], ...concertData };
+    }
+  } else {
+    // Add new concert
+    const newId = concerts.length > 0 ? Math.max(...concerts.map(c => c.id)) + 1 : 1;
+    concerts.push({ id: newId, ...concertData });
+  }
+  
+  closeModal();
+  renderConcerts();
+}
+
+// Form submission handler
+function handleFormSubmit(e) {
+  e.preventDefault();
+  
+  const concertData = {
+    name: document.getElementById('concertName').value,
+    date: document.getElementById('concertDate').value,
+    venue: document.getElementById('concertVenue').value,
+    tickets: parseInt(document.getElementById('concertTickets').value)
+  };
+  
+  if (editingId) {
+    // Update existing concert
+    const index = concerts.findIndex(c => c.id === editingId);
+    if (index !== -1) {
+      concerts[index] = { ...concerts[index], ...concertData };
+    }
+  } else {
+    // Add new concert
+    const newId = concerts.length > 0 ? Math.max(...concerts.map(c => c.id)) + 1 : 1;
+    concerts.push({ id: newId, ...concertData });
+  }
+  
+  closeModal();
+  renderConcerts();
+}
+
+// Close modals when clicking outside
+document.getElementById('editModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.getElementById('deleteModal').addEventListener('click', function(e) {
+  if (e.target === this) closeDeleteModal();
+});
+
+// Initial render
+renderConcerts();
+</script>
+</body>
+</html>
